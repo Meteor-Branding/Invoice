@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meteor Invoice</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #000;
+    background: #e5e5e5;
+    font-size: 11px;
+    line-height: 1.4;
+    padding: 20px;
+  }
+  .invoice {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 15mm 14mm;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  .top-bar { display: flex; justify-content: center; margin-bottom: 18px; }
+  .invoice-title { font-size: 38px; font-weight: 300; letter-spacing: 2px; }
+  .body-section { display: flex; gap: 20px; flex: 1; }
+  .left-col { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .right-col { flex: 1; display: flex; flex-direction: column; }
+  .items-wrapper { flex: 1; display: flex; flex-direction: column; }
+  .items-table { flex-shrink: 0; width: 100%; border-collapse: collapse; }
+  .bottom-block { margin-top: auto; }
+  .items-filler { display: none; }
+  .logo { width: 130px; margin-bottom: 10px; }
+  .company-name {
+    font-weight: bold; font-size: 11px; letter-spacing: 0.5px;
+    line-height: 1.4; margin-bottom: 28px;
+  }
+  .field-block { margin-bottom: 24px; }
+  .field-label {
+    font-weight: bold; letter-spacing: 0.5px;
+    margin-bottom: 6px; font-size: 11px;
+  }
+  .field-value { white-space: pre-line; line-height: 1.5; }
+  .meta-table { margin-bottom: 22px; }
+  .meta-row { display: flex; margin-bottom: 5px; }
+  .meta-label { font-weight: bold; width: 70px; }
+  .meta-value { flex: 1; }
+  .bank-block { margin-bottom: 22px; }
+  .bank-headline { font-weight: bold; margin-bottom: 8px; }
+  .bank-info { line-height: 1.6; }
+  .items-table thead th {
+    text-align: left; font-weight: bold;
+    padding: 8px 8px 10px 8px;
+    border-bottom: 2px solid #000; font-size: 11px;
+  }
+  .items-table thead th.qty,
+  .items-table tbody td.qty { text-align: right; }
+  .items-table tbody td {
+    padding: 10px 8px; vertical-align: top;
+    font-size: 10px; line-height: 1.4; word-break: break-word;
+  }
+  .items-table tbody tr { height: 36px; }
+  .items-table tbody tr:nth-child(odd) td { background-color: #f2f2f2; }
+  .items-table .col-item { width: 32%; }
+  .items-table .col-desc { width: 55%; }
+  .items-table .col-qty  { width: 13%; }
+  .totals-row {
+    display: flex; justify-content: space-between;
+    padding: 8px; font-size: 11px;
+  }
+  .total-final {
+    padding: 10px 8px; font-weight: bold; font-size: 12px;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid #000; border-bottom: 1px solid #000;
+  }
+  .remarks { margin-top: 14px; }
+  .remarks-label { font-weight: bold; margin-bottom: 6px; }
+  .remarks-text { white-space: pre-line; min-height: 70px; }
+  .footer { margin-top: auto; padding-top: 30px; font-size: 11px; line-height: 1.6; }
+  .footer-title { font-weight: bold; margin-bottom: 4px; }
+  .footer-block { margin-bottom: 10px; }
+  .footer-block:last-child { margin-bottom: 0; }
+  .text-red { color: #c00000; }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .invoice { width: 210mm; min-height: 297mm; box-shadow: none; margin: 0; }
+    .items-table tbody tr { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice">
+
+  <div class="top-bar">
+    <div class="invoice-title">INVOICE</div>
+  </div>
+
+  <div class="body-section">
+
+    <!-- LEFT COLUMN -->
+    <div class="left-col">
+      <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 239.3">
+        <polygon fill="#000" points="198.92 0 259.51 230.78 229.82 230.78 193.21 89.78 130.02 239.3 66.66 88.55 29.51 230.78 0 230.78 60.61 0 129.99 165.14 198.92 0"></polygon>
+        <polygon fill="#000" points="306.05 9.21 428.79 9.21 428.79 39.46 335.96 39.46 335.96 94.79 428.79 94.79 428.79 124.71 335.96 124.71 335.96 200.89 428.79 200.89 428.79 230.78 306.05 230.78 306.05 9.21"></polygon>
+        <polygon fill="#000" points="468.72 9.21 604.18 9.21 604.18 39.46 551.32 39.46 551.32 230.78 521.42 230.78 521.42 39.46 468.72 39.46 468.72 9.21"></polygon>
+        <polygon fill="#000" points="653.66 9.21 776.46 9.21 776.46 39.46 683.57 39.46 683.57 94.79 776.46 94.79 776.46 124.71 683.57 124.71 683.57 200.89 776.46 200.89 776.46 230.78 653.66 230.78 653.66 9.21"></polygon>
+        <path fill="#000" d="M1097.01,35.98v77.24c44.65.93,66.97-11.97,66.97-38.79,0-9.37-2.64-17.09-7.84-23.04-5.23-5.98-12.19-10.04-20.83-12.19-8.75-2.16-21.49-3.22-38.31-3.22ZM1066.79,9.21h47.99c23.87,0,43.33,5.97,58.32,17.81,15.08,11.86,22.56,27.09,22.56,45.65,0,14.84-4.88,27.95-14.56,39.32-9.71,11.29-24.9,19.35-45.49,23.99l64.38,94.8h-34.7l-61.47-91.13h-6.82v91.13h-30.23V9.21Z"></path>
+        <path fill="#F5B82E" d="M868.97,114.3c7.64,15.37,19.31,25.84,35.03,31.37,15.76,5.58,31.09,4.59,46.1-2.81,15.12-7.49,25.3-19.09,30.55-34.8,5.23-15.77,3.94-31.42-3.79-47.1-7.57-15.37-19.29-25.84-34.99-31.39-15.79-5.53-31.16-4.57-46.36,2.92-15.1,7.43-25.25,19.08-30.38,34.88-5.06,15.76-3.78,31.4,3.85,46.93ZM884.47,10.2c22.16-10.92,44.28-12.65,66.48-5.14,22.16,7.5,38.65,22.22,49.55,44.23,10.82,21.95,12.49,44.04,5.04,66.18-7.5,22.17-22.33,38.76-44.46,49.68-22.12,10.94-44.23,12.67-66.24,5.2-22.12-7.42-38.58-22.23-49.5-44.34-10.92-22-12.63-44.05-5.23-66.16,7.35-22.12,22.13-38.65,44.35-49.66"></path>
+        <path fill="#000" d="M834.53,220.36c0,8.28,39.57,14.98,88.35,14.98s88.28-6.7,88.28-14.98-39.55-15-88.28-15-88.35,6.73-88.35,15Z"></path>
+      </svg>
+      <div class="company-name">METEOR<br>ILLUMINATION<br>TECHNOLOGIES INC.</div>
+
+      <div class="field-block">
+        <div class="field-label">PAYMENT TERMS</div>
+        <div class="field-value">{{PAYMENT}}</div>
+      </div>
+      <div class="field-block">
+        <div class="field-label">BILL TO</div>
+        <div class="field-value">{{BILL_TO}}</div>
+        <div class="field-value">{{INFO}}</div>
+      </div>
+      <div class="field-block">
+        <div class="field-label">SHIP TO</div>
+        <div class="field-value">{{SHIP_TO}}</div>
+        <div class="field-value">{{ATTN}}</div>
+      </div>
+      <div class="field-block">
+        <div class="field-label">REPRESENTIVE</div>
+        <div class="field-value">{{REPRESENTIVE}}</div>
+      </div>
+      <div class="field-block">
+        <div class="field-label">PROJECT</div>
+        <div class="field-value">{{PROJECT}}</div>
+      </div>
+      <div class="field-block">
+        <div class="field-label">SHIP VIA</div>
+        <div class="field-value">{{SHIP}}</div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-block">
+          <div class="footer-title">METEOR LIGHTING</div>
+          P: 213 255 2060<br>F: 213 596 3704
+        </div>
+        <div class="footer-block">1860 S Carlos Ave,<br>Ontario, CA 91761</div>
+        <div class="footer-block">www.meteor-lighting.com</div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+
+      <div class="meta-table">
+        <div class="meta-row"><span class="meta-label">DATE</span><span class="meta-value">{{DATE}}</span></div>
+        <div class="meta-row"><span class="meta-label">P.O #</span><span class="meta-value">{{PO}}</span></div>
+        <div class="meta-row"><span class="meta-label">S.O #</span><span class="meta-value">{{SO}}</span></div>
+        <div class="meta-row"><span class="meta-label">INV#</span><span class="meta-value">{{INV}}</span></div>
+      </div>
+
+      <div class="bank-block">
+        <div class="bank-headline">*Please make checks payable to <strong>METEOR ILLUMINATION TECHNOLOGIES INC.</strong></div>
+        <div class="bank-info">
+          Bank Reference: CTBC BANK - Rowland Heights<br>
+          Branch Account # 3800234435<br>
+          Beneficiary: METEOR ILLUMINATION TECHNOLOGIES INC.<br>
+          Bank ABA Routing Number: 122210406&nbsp;&nbsp;Swift Code: CTHCUS66<br>
+          ACH payments are preferred. Please remit via ACH if possible.
+        </div>
+      </div>
+
+      <div class="items-wrapper">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th class="col-item">ITEM</th>
+              <th class="col-desc">DESCRIPTION</th>
+              <th class="col-qty qty">QTY</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ITEMS_ROWS}}
+            {{RECEIVED_ROW}}
+          </tbody>
+        </table>
+        <div class="items-filler"></div>
+      </div>
+
+      <div class="bottom-block">
+        <div class="totals">
+          <div class="totals-row">
+            <span class="label">SUBTOTAL{{CURR}}</span>
+            <span class="value">{{SUBTOTAL}}</span>
+          </div>
+          <div class="totals-row">
+            <span class="label">SHIPPING CHARGE{{CURR}}</span>
+            <span class="value">{{CHARGE}}</span>
+          </div>
+          {{DEPOSIT_ROW}}
+          <div class="total-final">
+            <span>{{FINAL_LABEL}}{{CURR}}</span>
+            <span>{{FINAL_VALUE}}</span>
+          </div>
+        </div>
+        <div class="remarks">
+          <div class="remarks-label">REMARK &amp; SPECIAL INSTRUCTIONS</div>
+          <div class="remarks-text">{{REMARK}}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var wrapper = document.querySelector('.items-wrapper');
+    var table   = document.querySelector('.items-table');
+    var tbody   = table && table.querySelector('tbody');
+    if (!wrapper || !tbody) return;
+    var sampleRow = tbody.querySelector('tr');
+    var rowH = sampleRow ? sampleRow.getBoundingClientRect().height : 36;
+    if (!rowH) rowH = 36;
+    var cols = table.querySelectorAll('thead th').length;
+    for (var i = 0; i < 200; i++) {
+      var wrapBox  = wrapper.getBoundingClientRect();
+      var tableBox = table.getBoundingClientRect();
+      var space = wrapBox.bottom - tableBox.bottom;
+      if (space < rowH * 0.5) break;
+      var tr = document.createElement('tr');
+      for (var c = 0; c < cols; c++) {
+        var td = document.createElement('td');
+        td.innerHTML = '&nbsp;';
+        if (c === cols - 1) td.className = 'qty';
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+  })();
+</script>
+
+</body>
+</html>
