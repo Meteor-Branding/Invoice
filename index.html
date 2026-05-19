@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Meteor Invoice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
     color: #000;
     background: #e5e5e5;
     font-size: 11px;
@@ -24,8 +27,7 @@
     display: flex;
     flex-direction: column;
   }
-  .top-bar { display: flex; justify-content: center; margin-bottom: 18px; }
-  .invoice-title { font-size: 38px; font-weight: 300; letter-spacing: 2px; }
+  .invoice-title { font-size: 38px; font-weight: 300; letter-spacing: 2px; margin-bottom: 18px; }
   .body-section { display: flex; gap: 20px; flex: 1; }
   .left-col { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; }
   .right-col { flex: 1; display: flex; flex-direction: column; }
@@ -33,10 +35,10 @@
   .items-table { flex-shrink: 0; width: 100%; border-collapse: collapse; }
   .bottom-block { margin-top: auto; }
   .items-filler { display: none; }
-  .logo { width: 130px; margin-bottom: 10px; }
+  .logo { width: 130px; margin-top: 16px; margin-bottom: 10px; }
   .company-name {
     font-weight: bold; font-size: 11px; letter-spacing: 0.5px;
-    line-height: 1.4; margin-bottom: 28px;
+    line-height: 1.4; margin-bottom: 75px;
   }
   .field-block { margin-bottom: 24px; }
   .field-label {
@@ -97,10 +99,6 @@
 
 <div class="invoice">
 
-  <div class="top-bar">
-    <div class="invoice-title">INVOICE</div>
-  </div>
-
   <div class="body-section">
 
     <!-- LEFT COLUMN -->
@@ -156,6 +154,8 @@
     <!-- RIGHT COLUMN -->
     <div class="right-col">
 
+      <div class="invoice-title">INVOICE</div>
+
       <div class="meta-table">
         <div class="meta-row"><span class="meta-label">DATE</span><span class="meta-value">{{DATE}}</span></div>
         <div class="meta-row"><span class="meta-label">P.O #</span><span class="meta-value">{{PO}}</span></div>
@@ -164,7 +164,7 @@
       </div>
 
       <div class="bank-block">
-        <div class="bank-headline">*Please make checks payable to <strong>METEOR ILLUMINATION TECHNOLOGIES INC.</strong></div>
+        <div class="bank-headline">*Please make checks payable to METEOR ILLUMINATION TECHNOLOGIES INC.</div>
         <div class="bank-info">
           Bank Reference: CTBC BANK - Rowland Heights<br>
           Branch Account # 3800234435<br>
