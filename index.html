@@ -77,24 +77,28 @@
   /* compact(9-12 項):先壓行距,字級不動 */
   .items-table.compact tbody td { padding: 6px 8px; line-height: 1.35; }
   .items-table.compact tbody tr { height: 28px; }
+  body.compact .remarks-text { font-size: 10px; line-height: 1.35; min-height: 50px; }
 
   /* dense(13-17 項):INVOICE 縮小、行距再壓、字級開始輕微縮 */
   .items-table.dense tbody td { padding: 4px 7px; font-size: 9px; line-height: 1.3; }
   .items-table.dense tbody tr { height: 22px; }
   .items-table.dense thead th { padding: 6px 7px 8px 7px; font-size: 10px; }
   body.dense .invoice-title { font-size: 26px; margin-bottom: 12px; }
+  body.dense .remarks-text { font-size: 9px; line-height: 1.3; min-height: 40px; }
 
   /* tight(18-22 項):INVOICE 更小、字級縮小 */
   .items-table.tight tbody td { padding: 3px 6px; font-size: 8px; line-height: 1.25; }
   .items-table.tight tbody tr { height: 19px; }
   .items-table.tight thead th { padding: 5px 6px 7px 6px; font-size: 9.5px; }
   body.tight .invoice-title { font-size: 22px; margin-bottom: 10px; }
+  body.tight .remarks-text { font-size: 8px; line-height: 1.25; min-height: 30px; }
 
   /* ultra-tight(23+ 項):最緊湊 */
   .items-table.ultra-tight tbody td { padding: 2px 5px; font-size: 7px; line-height: 1.2; }
   .items-table.ultra-tight tbody tr { height: 16px; }
   .items-table.ultra-tight thead th { padding: 4px 5px 6px 5px; font-size: 9px; }
   body.ultra-tight .invoice-title { font-size: 20px; margin-bottom: 8px; }
+  body.ultra-tight .remarks-text { font-size: 7px; line-height: 1.2; min-height: 24px; }
 
   .totals-row {
     display: flex; justify-content: space-between;
@@ -107,8 +111,8 @@
   }
   .remarks { margin-top: 14px; }
   .remarks-label { font-weight: bold; margin-bottom: 6px; }
-  .remarks-text { white-space: pre-line; min-height: 70px; }
-  .footer { margin-top: auto; padding-top: 30px; font-size: 11px; line-height: 1.6; }
+  .remarks-text { white-space: pre-line; min-height: 70px; font-size: 10px; line-height: 1.4; }
+  .footer { margin-top: auto; padding-top: 30px; padding-bottom: 8mm; font-size: 11px; line-height: 1.6; }
   .footer-title { font-weight: bold; margin-bottom: 4px; }
   .footer-block { margin-bottom: 10px; }
   .footer-block:last-child { margin-bottom: 0; }
