@@ -35,6 +35,13 @@
   .items-wrapper { flex: 1; display: flex; flex-direction: column; }
   .items-table { flex-shrink: 0; width: 100%; border-collapse: collapse; }
   .bottom-block { margin-top: auto; }
+  .received-line {
+    text-align: center;
+    color: #c00000;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 6px 8px 10px 8px;
+  }
   .items-filler { display: none; }
   .logo { width: 130px; margin-top: 16px; margin-bottom: 10px; }
   .company-name {
@@ -216,13 +223,13 @@
           </thead>
           <tbody>
             {{ITEMS_ROWS}}
-            {{RECEIVED_ROW}}
           </tbody>
         </table>
         <div class="items-filler"></div>
       </div>
 
       <div class="bottom-block">
+        {{RECEIVED_LINE}}
         <div class="totals">
           <div class="totals-row">
             <span class="label">SUBTOTAL{{CURR}}</span>
